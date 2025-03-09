@@ -54,7 +54,7 @@ public class LoginServiceImpl implements LoginService {
     public Long getValidUid(String token) {
         Long uid = jwtUtils.getUidOrNull(token);
         if (Objects.isNull(uid)) return null;
-        String oldToken = RedisUtils.get(getUserTokenKey(uid));
+        String oldToken = RedisUtils.getStr(getUserTokenKey(uid));
         if(StringUtils.isBlank(oldToken)) return null;
         return Objects.equals(oldToken, token) ? uid : null;
     }

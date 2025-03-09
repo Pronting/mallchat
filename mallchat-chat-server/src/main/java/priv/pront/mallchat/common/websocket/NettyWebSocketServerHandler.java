@@ -1,5 +1,6 @@
 package priv.pront.mallchat.common.websocket;
 
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import cn.hutool.json.JSONUtil;
 import io.netty.channel.Channel;
@@ -10,6 +11,8 @@ import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
+import io.netty.util.Attribute;
+import io.netty.util.AttributeKey;
 import lombok.extern.slf4j.Slf4j;
 import priv.pront.mallchat.common.websocket.domain.enums.WSReqTypeEnum;
 import priv.pront.mallchat.common.websocket.domain.vo.req.WSBaseReq;
@@ -67,6 +70,7 @@ public class NettyWebSocketServerHandler extends SimpleChannelInboundHandler<Tex
         WSBaseReq wsBaseReq = JSONUtil.toBean(text, WSBaseReq.class);
         switch (WSReqTypeEnum.of(wsBaseReq.getType())) {
             case AUTHORIZE:
+                webSocketService.authorize(channelHandlerContext.channel(), wsBaseReq.getData());
                 break;
             case HEARTBEAT:
                 break;
@@ -80,13 +84,16 @@ public class NettyWebSocketServerHandler extends SimpleChannelInboundHandler<Tex
     @Override
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
         if (evt instanceof WebSocketServerProtocolHandler.HandshakeComplete) {
-            log.info("握手完成！");
+            System.out.println("握手完成！");
+            String token = NettyUtil.getAttr(ctx.channel(), NettyUtil.TOKEN);
+            if (StrUtil.isNotBlank(token)) {  // 用户不是第一次登录 有 token 的情况下
+                webSocketService.authorize(ctx.channel(), token);
+            }
         }else if(evt instanceof IdleStateEvent) {
 //            断开连接
             IdleStateEvent event = (IdleStateEvent) evt;
             if (event.state() == IdleState.READER_IDLE) {
-               log.info("读空闲");
-//                TODO 用户下线
+                System.out.println("读空闲");
                 userOffline(ctx.channel());
             }
         }

@@ -16,9 +16,7 @@ import priv.pront.mallchat.common.user.dao.UserDao;
 import priv.pront.mallchat.common.user.domain.entity.User;
 import priv.pront.mallchat.common.user.service.LoginService;
 import priv.pront.mallchat.common.websocket.domain.dto.WSChannelExtraDTO;
-import priv.pront.mallchat.common.websocket.domain.enums.WSRespTypeEnum;
 import priv.pront.mallchat.common.websocket.domain.vo.resp.WSBaseResp;
-import priv.pront.mallchat.common.websocket.domain.vo.resp.WSLoginUrl;
 import priv.pront.mallchat.common.websocket.service.WebSocketService;
 import priv.pront.mallchat.common.websocket.service.adapter.WebSocketAdapter;
 
@@ -67,7 +65,7 @@ public class WebSocketServiceImpl implements WebSocketService {
 //        找微信申请带参的二维码
         WxMpQrCodeTicket wxMpQrCodeTicket = wxMpService.getQrcodeService().qrCodeCreateTmpTicket(code, (int) DURATION.getSeconds());
 //        把这个二维码推送给前端
-        sendMsg(channel, WebSocketAdapter.buildResq(wxMpQrCodeTicket));
+        sendMsg(channel, WebSocketAdapter.buildResp(wxMpQrCodeTicket));
     }
 
     @Override
@@ -84,10 +82,26 @@ public class WebSocketServiceImpl implements WebSocketService {
         User user = userDao.getById(uid);
 //        移出 code
         WAIT_LOGIN_MAP.invalidate(code);
-//        TODO 获取调用登录模块获取 token
+//        获取调用登录模块获取 token
         String token = loginService.login(uid);
 //        用户登录
-        sendMsg(channel, WebSocketAdapter.buildResq(user, token));
+        loginSuccess(channel, user, token);
+    }
+
+    /**
+     * 用户登录成功 包括发送消息，用户上线，推送使事件
+     * @param channel
+     * @param user
+     * @param token
+     */
+    private void loginSuccess(Channel channel, User user, String token) {
+//        保存 channel 的对应 uid
+        WSChannelExtraDTO wsChannelExtraDTO = ONLINE_WS_MAP.get(channel);
+        wsChannelExtraDTO.setUid(user.getId());
+//        TODO 用户上线成功的事件
+
+//        推送成功信息
+        sendMsg(channel, WebSocketAdapter.buildResp(user, token));
     }
 
     @Override
@@ -95,6 +109,18 @@ public class WebSocketServiceImpl implements WebSocketService {
         Channel channel = WAIT_LOGIN_MAP.getIfPresent(code);
         if (Objects.isNull(channel)) return;
         sendMsg(channel, WebSocketAdapter.buildWaitAuthorizeResq());
+    }
+
+    @Override
+    public void authorize(Channel channel, String token) {
+        Long validUid = loginService.getValidUid(token);
+        if (Objects.nonNull(validUid)) {
+            User user = userDao.getById(validUid);
+            loginSuccess(channel, user, token);
+        }else {
+//          不存在的话，将 token 清除，下次请求不要携带 token ,重新登录
+            sendMsg(channel, WebSocketAdapter.buildInvalidTokenResp());
+        }
     }
 
     private void sendMsg(Channel channel, WSBaseResp<?> resp) {

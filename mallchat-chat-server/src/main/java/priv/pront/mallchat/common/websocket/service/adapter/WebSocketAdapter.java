@@ -9,14 +9,14 @@ import priv.pront.mallchat.common.websocket.domain.vo.resp.WSLoginUrl;
 
 public class WebSocketAdapter {
 
-    public static WSBaseResp<?> buildResq(WxMpQrCodeTicket wxMpQrCodeTicket) {
+    public static WSBaseResp<?> buildResp(WxMpQrCodeTicket wxMpQrCodeTicket) {
         WSBaseResp<WSLoginUrl> resp = new WSBaseResp<>();
         resp.setType(WSRespTypeEnum.LOGIN_URL.getType());
         resp.setData(new WSLoginUrl(wxMpQrCodeTicket.getUrl()));
         return resp;
     }
 
-    public static WSBaseResp<?> buildResq(User user, String token) {
+    public static WSBaseResp<?> buildResp(User user, String token) {
         WSBaseResp<WSLoginSuccess> resp = new WSBaseResp<>();
         resp.setType(WSRespTypeEnum.LOGIN_SUCCESS.getType());
         WSLoginSuccess build = WSLoginSuccess.builder()
@@ -34,5 +34,11 @@ public class WebSocketAdapter {
         resp.setType(WSRespTypeEnum.LOGIN_SCAN_SUCCESS.getType());
         return resp;
 
+    }
+
+    public static WSBaseResp<?> buildInvalidTokenResp() {
+        WSBaseResp<WSLoginUrl> resp = new WSBaseResp<>();
+        resp.setType(WSRespTypeEnum.INVALIDATE_TOKEN.getType());
+        return resp;
     }
 }

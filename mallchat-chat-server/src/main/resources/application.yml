@@ -20,6 +20,9 @@ spring:
     timeout: 1800000
     # 设置密码
     password: ${mallchat.redis.password}
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
 logging:
   jackson:
     serialization:
