@@ -2,6 +2,7 @@ package priv.pront.mallchat.common.user.service;
 
 import priv.pront.mallchat.common.user.domain.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
+import priv.pront.mallchat.common.user.domain.vo.resp.UserInfoResp;
 
 /**
  * <p>
@@ -19,4 +20,8 @@ public interface UserService  {
      * @return 用户 id
      */
     Long register(User registerUser);
+
+    UserInfoResp getUserInfo(Long uid);
+
+    void modifyName(Long uid, String name);
 }

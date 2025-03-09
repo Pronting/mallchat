@@ -2,13 +2,19 @@ package priv.pront.mallchat.common.user.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 import priv.pront.mallchat.common.common.domain.vo.resp.ApiResult;
+import priv.pront.mallchat.common.common.interceptor.TokenInterceptor;
+import priv.pront.mallchat.common.common.util.RequestHolder;
+import priv.pront.mallchat.common.user.domain.vo.ModifyNameReq;
 import priv.pront.mallchat.common.user.domain.vo.resp.UserInfoResp;
+import priv.pront.mallchat.common.user.service.LoginService;
+import priv.pront.mallchat.common.user.service.UserService;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 /**
  * <p>
@@ -23,11 +29,24 @@ import priv.pront.mallchat.common.user.domain.vo.resp.UserInfoResp;
 @Api(tags = "用户模块")
 public class UserController {
 
+    @Autowired
+    private UserService userService;
+
     @GetMapping("/userInfo")
     @ApiOperation("获取用户信息")
-    public ApiResult<UserInfoResp> getUserInfo(@RequestParam Long uid) {
-        return null;
+    public ApiResult<UserInfoResp> getUserInfo() {
+        return ApiResult.success(userService.getUserInfo(RequestHolder.get().getUid()));
     }
+
+
+    @PutMapping("/name")
+    @ApiOperation("用户改名")
+    public ApiResult<Void> modifyName(@Valid @RequestBody ModifyNameReq req) {
+        userService.modifyName(RequestHolder.get().getUid(), req.getName());
+        return ApiResult.success();
+    }
+
+
 
 }
 

@@ -16,6 +16,7 @@ import priv.pront.mallchat.common.common.util.JwtUtils;
 import priv.pront.mallchat.common.common.util.RedisUtils;
 import priv.pront.mallchat.common.user.dao.UserDao;
 import priv.pront.mallchat.common.user.domain.entity.User;
+import priv.pront.mallchat.common.user.service.LoginService;
 
 import javax.annotation.Resource;
 
@@ -39,8 +40,11 @@ public class DaoTest {
     @Autowired
     private RedissonClient redissonClient;
 
+    @Autowired
+    private LoginService loginService;
+
     @Test
-    public void test2() throws WxErrorException {
+    public void wxQRcode() throws WxErrorException {
         WxMpQrCodeTicket wxMpQrCodeTicket = wxMpService.getQrcodeService().qrCodeCreateTmpTicket(1, 10000);
 //        带参二维码
         String url = wxMpQrCodeTicket.getUrl();
@@ -59,7 +63,7 @@ public class DaoTest {
     @Test
     public void redis() {
         RedisUtils.set("name","卷心菜");
-        String name = RedisUtils.get("name");
+        String name = RedisUtils.getStr("name");
         System.out.println(name); //卷心菜
     }
 
@@ -69,6 +73,12 @@ public class DaoTest {
         lock.lock();
         System.out.println();
         lock.unlock();
+    }
+
+    @Test
+    public void loginToken(){
+        String token = loginService.login(20001L);
+        System.out.println(token);
     }
 
 
