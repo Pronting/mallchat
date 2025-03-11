@@ -9,12 +9,15 @@ import priv.pront.mallchat.common.common.domain.vo.resp.ApiResult;
 import priv.pront.mallchat.common.common.interceptor.TokenInterceptor;
 import priv.pront.mallchat.common.common.util.RequestHolder;
 import priv.pront.mallchat.common.user.domain.vo.ModifyNameReq;
+import priv.pront.mallchat.common.user.domain.vo.resp.BadgeResp;
 import priv.pront.mallchat.common.user.domain.vo.resp.UserInfoResp;
+import priv.pront.mallchat.common.user.domain.vo.resp.WearingBadgeResp;
 import priv.pront.mallchat.common.user.service.LoginService;
 import priv.pront.mallchat.common.user.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * <p>
@@ -43,6 +46,20 @@ public class UserController {
     @ApiOperation("用户改名")
     public ApiResult<Void> modifyName(@Valid @RequestBody ModifyNameReq req) {
         userService.modifyName(RequestHolder.get().getUid(), req.getName());
+        return ApiResult.success();
+    }
+
+    @GetMapping("/badges")
+    @ApiOperation("可选徽章预览")
+    public ApiResult<List<BadgeResp>> badges() {
+        return ApiResult.success(userService.badges(RequestHolder.get().getUid()));
+    }
+
+    @PutMapping("/badge")
+    @ApiOperation("佩戴徽章")
+    public ApiResult<Void> wearingBadge(@Valid @RequestBody WearingBadgeResp req) {
+        userService.wearingBadge(RequestHolder.get().getUid(), req.getItemId());
+
         return ApiResult.success();
     }
 

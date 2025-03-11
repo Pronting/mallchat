@@ -2,11 +2,11 @@ package priv.pront.mallchat.common.user.dao;
 
 import priv.pront.mallchat.common.common.domain.enums.YesOrNoEnum;
 import priv.pront.mallchat.common.user.domain.entity.UserBackpack;
-import priv.pront.mallchat.common.user.domain.enums.ItemEnum;
 import priv.pront.mallchat.common.user.mapper.UserBackpackMapper;
-import priv.pront.mallchat.common.user.service.UserBackpackService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * <p>
@@ -30,7 +30,7 @@ public class UserBackpackDao extends ServiceImpl<UserBackpackMapper, UserBackpac
     public UserBackpack getFirstValidItem(Long uid, Long itemId) {
         return lambdaQuery()
                 .eq(UserBackpack::getUid, uid)
-                .eq(UserBackpack::getId, itemId)
+                .eq(UserBackpack::getItemId, itemId)
                 .eq(UserBackpack::getStatus, YesOrNoEnum.NO.getStatus())
                 .orderByAsc()
                 .last("limit 1")
@@ -43,5 +43,19 @@ public class UserBackpackDao extends ServiceImpl<UserBackpackMapper, UserBackpac
                 .eq(UserBackpack::getStatus, YesOrNoEnum.NO.getStatus())
                 .set(UserBackpack::getStatus, YesOrNoEnum.YES.getStatus())
                 .update();
+    }
+
+    public List<UserBackpack> getByItemId(Long uid, List<Long> itemId) {
+        return lambdaQuery()
+                .eq(UserBackpack::getUid, uid)
+                .eq(UserBackpack::getStatus, YesOrNoEnum.NO.getStatus())
+                .in(UserBackpack::getItemId, itemId)
+                .list();
+    }
+
+    public UserBackpack getByIdempotent(String idempotent) {
+        return lambdaQuery()
+                .eq(UserBackpack::getIdempotent, idempotent)
+                .one();
     }
 }

@@ -6,9 +6,11 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum CommonErrorEnum implements ErrorEnum{
 
+    BUSINESS_ERROR(0, "{0}"),
+    SYSTEM_ERROR(-1, "系统出小差了，请稍后重试"),
     PARAM_INVALID(-2, "参数校验失败"),
-    BUSINESS_ERROR(0, "{}"),
-    SYSTEM_ERROR(-1, "系统出小差了，请稍后重试");
+
+    LOCK_LIMIT(-3, "请求太频繁了，请稍后重试");
 
     private final Integer code;
 
