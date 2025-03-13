@@ -1,5 +1,6 @@
 package priv.pront.mallchat.common.user.dao;
 
+import priv.pront.mallchat.common.common.domain.enums.YesOrNoEnum;
 import priv.pront.mallchat.common.user.domain.entity.User;
 import priv.pront.mallchat.common.user.mapper.UserMapper;
 import priv.pront.mallchat.common.user.service.UserService;
@@ -38,6 +39,13 @@ public class UserDao extends ServiceImpl<UserMapper, User> {
         lambdaUpdate()
                 .eq(User::getId, uid)
                 .set(User::getItemId, itemId)
+                .update();
+    }
+
+    public void invalidUid(Long id) {
+        lambdaUpdate()
+                .eq(User::getId, id)
+                .set(User::getStatus, YesOrNoEnum.YES.getStatus())
                 .update();
     }
 }

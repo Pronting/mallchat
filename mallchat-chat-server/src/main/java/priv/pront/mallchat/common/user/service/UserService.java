@@ -2,6 +2,7 @@ package priv.pront.mallchat.common.user.service;
 
 import priv.pront.mallchat.common.user.domain.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
+import priv.pront.mallchat.common.user.domain.vo.req.BlackReq;
 import priv.pront.mallchat.common.user.domain.vo.resp.BadgeResp;
 import priv.pront.mallchat.common.user.domain.vo.resp.UserInfoResp;
 
@@ -31,4 +32,6 @@ public interface UserService  {
     List<BadgeResp> badges(Long uid);
 
     void wearingBadge(Long uid, Long itemId);
+
+    void black(BlackReq req);
 }

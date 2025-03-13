@@ -5,17 +5,21 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import priv.pront.mallchat.common.common.annotation.AuthCheck;
 import priv.pront.mallchat.common.common.domain.vo.resp.ApiResult;
-import priv.pront.mallchat.common.common.interceptor.TokenInterceptor;
+import priv.pront.mallchat.common.common.util.AssertUtil;
 import priv.pront.mallchat.common.common.util.RequestHolder;
-import priv.pront.mallchat.common.user.domain.vo.ModifyNameReq;
+import priv.pront.mallchat.common.user.domain.enums.IdempotentEnum;
+import priv.pront.mallchat.common.user.domain.enums.RoleEnum;
+import priv.pront.mallchat.common.user.domain.vo.req.BlackReq;
+import priv.pront.mallchat.common.user.domain.vo.req.ModifyNameReq;
 import priv.pront.mallchat.common.user.domain.vo.resp.BadgeResp;
 import priv.pront.mallchat.common.user.domain.vo.resp.UserInfoResp;
 import priv.pront.mallchat.common.user.domain.vo.resp.WearingBadgeResp;
-import priv.pront.mallchat.common.user.service.LoginService;
+import priv.pront.mallchat.common.user.service.RoleService;
+import priv.pront.mallchat.common.user.service.UserBackpackService;
 import priv.pront.mallchat.common.user.service.UserService;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -59,7 +63,14 @@ public class UserController {
     @ApiOperation("佩戴徽章")
     public ApiResult<Void> wearingBadge(@Valid @RequestBody WearingBadgeResp req) {
         userService.wearingBadge(RequestHolder.get().getUid(), req.getItemId());
+        return ApiResult.success();
+    }
 
+    @PutMapping("/black")
+    @ApiOperation("拉黑用户")
+    @AuthCheck(mustRole = RoleEnum.ADMIN)
+    public ApiResult<Void> black(@Valid @RequestBody BlackReq req) {
+        userService.black(req);
         return ApiResult.success();
     }
 

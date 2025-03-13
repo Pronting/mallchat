@@ -1,4 +1,4 @@
-package priv.pront.mallchat.common.user.domain.vo;
+package priv.pront.mallchat.common.user.domain.vo.req;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
