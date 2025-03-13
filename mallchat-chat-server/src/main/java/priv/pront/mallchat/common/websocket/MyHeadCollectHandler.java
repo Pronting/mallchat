@@ -12,7 +12,9 @@ import io.netty.handler.codec.http.websocketx.WebSocketServerHandshakerFactory;
 import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 import io.netty.util.Attribute;
 import io.netty.util.AttributeKey;
+import org.apache.commons.lang3.StringUtils;
 
+import java.net.InetSocketAddress;
 import java.util.Optional;
 
 public class MyHeadCollectHandler extends ChannelInboundHandlerAdapter {
@@ -67,7 +69,7 @@ public class MyHeadCollectHandler extends ChannelInboundHandlerAdapter {
 
 
     /**
-     * 请求头 token 处理
+     * 请求头 token / ip 处理
      * @param ctx
      * @param msg
      * @throws Exception
@@ -84,6 +86,16 @@ public class MyHeadCollectHandler extends ChannelInboundHandlerAdapter {
                     .map(CharSequence::toString);
             tokenOptional.ifPresent(s -> NettyUtil.setAttr(ctx.channel(), NettyUtil.TOKEN, s));
             request.setUri(urlBuilder.getPath().toString());
+//            取用户 IP
+            String ip = request.headers().get("X-Real-IP");
+            if (StringUtils.isBlank(ip)) {
+                InetSocketAddress address = (InetSocketAddress) ctx.channel().remoteAddress();
+                ip = address.getAddress().getHostAddress();
+            }
+//            保存到 channel 附件
+            NettyUtil.setAttr(ctx.channel(), NettyUtil.IP, ip);
+//            处理器只需要用一次
+            ctx.pipeline().remove(this);
         }
 
         ctx.fireChannelRead(msg);

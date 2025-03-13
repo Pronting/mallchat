@@ -1,11 +1,13 @@
 package priv.pront.mallchat.common.user.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import priv.pront.mallchat.common.common.annotation.RedissonLock;
 import priv.pront.mallchat.common.common.exception.BusinessException;
 import priv.pront.mallchat.common.common.util.AssertUtil;
+import priv.pront.mallchat.common.event.UserRegisterEvent;
 import priv.pront.mallchat.common.user.dao.ItemConfigDao;
 import priv.pront.mallchat.common.user.domain.entity.ItemConfig;
 import priv.pront.mallchat.common.user.domain.entity.UserBackpack;
@@ -40,11 +42,15 @@ public class UserServiceImpl implements UserService{
     @Autowired
     private ItemConfigDao itemConfigDao;
 
+    @Autowired
+    private ApplicationEventPublisher applicationEventPublisher;
+
     @Override
     @Transactional
     public Long register(User registerUser) {
         userDao.save(registerUser);
 //        todo 用户注册的事件
+        applicationEventPublisher.publishEvent(new UserRegisterEvent(this, registerUser));
         return registerUser.getId();
     }
 

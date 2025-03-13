@@ -10,17 +10,22 @@ import me.chanjar.weixin.common.error.WxErrorException;
 import me.chanjar.weixin.mp.api.WxMpService;
 import me.chanjar.weixin.mp.bean.result.WxMpQrCodeTicket;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+import priv.pront.mallchat.common.event.UserOnlineEvent;
 import priv.pront.mallchat.common.user.dao.UserDao;
+import priv.pront.mallchat.common.user.domain.entity.IpInfo;
 import priv.pront.mallchat.common.user.domain.entity.User;
 import priv.pront.mallchat.common.user.service.LoginService;
+import priv.pront.mallchat.common.websocket.NettyUtil;
 import priv.pront.mallchat.common.websocket.domain.dto.WSChannelExtraDTO;
 import priv.pront.mallchat.common.websocket.domain.vo.resp.WSBaseResp;
 import priv.pront.mallchat.common.websocket.service.WebSocketService;
 import priv.pront.mallchat.common.websocket.service.adapter.WebSocketAdapter;
 
 import java.time.Duration;
+import java.util.Date;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -36,6 +41,9 @@ public class WebSocketServiceImpl implements WebSocketService {
 
     @Autowired
     private LoginService loginService;
+
+    @Autowired
+    private ApplicationEventPublisher applicationEventPublisher;
 
     /**
      * 管理所有用户的连接
@@ -98,10 +106,12 @@ public class WebSocketServiceImpl implements WebSocketService {
 //        保存 channel 的对应 uid
         WSChannelExtraDTO wsChannelExtraDTO = ONLINE_WS_MAP.get(channel);
         wsChannelExtraDTO.setUid(user.getId());
-//        TODO 用户上线成功的事件
-
 //        推送成功信息
         sendMsg(channel, WebSocketAdapter.buildResp(user, token));
+//         用户上线成功的事件
+        user.setLastOptTime(new Date());
+        user.refreshIp(NettyUtil.getAttr(channel, NettyUtil.IP));
+        applicationEventPublisher.publishEvent(new UserOnlineEvent(this, user));
     }
 
     @Override
