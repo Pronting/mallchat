@@ -14,6 +14,7 @@ import priv.pront.mallchat.common.chat.domain.entity.RoomFriend;
 import priv.pront.mallchat.common.chat.domain.entity.RoomGroup;
 import priv.pront.mallchat.common.chat.domain.vo.req.ChatMessageReq;
 import priv.pront.mallchat.common.chat.service.ChatService;
+import priv.pront.mallchat.common.chat.service.cache.RoomCache;
 import priv.pront.mallchat.common.common.domain.enums.NormalOrNoEnum;
 import priv.pront.mallchat.common.common.event.MessageSendEvent;
 import priv.pront.mallchat.common.common.util.AssertUtil;
@@ -26,6 +27,9 @@ public class ChatServiceImpl implements ChatService {
 
     @Autowired
     private ApplicationEventPublisher applicationEventPublisher;
+
+    @Autowired
+    private RoomCache roomCache;
 
     /**
      * 发送消息
