@@ -7,8 +7,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.web.servlet.ServletComponentScan;
 
 /**
- * @author zhongzb
- * @date 2021/05/27
+ * @author Pronting
  */
 @SpringBootApplication(scanBasePackages = {"priv.pront.mallchat"})
 @MapperScan("priv.pront.mallchat.common.**.mapper")

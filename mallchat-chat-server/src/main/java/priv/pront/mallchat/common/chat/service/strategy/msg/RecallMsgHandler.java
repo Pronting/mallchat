@@ -6,10 +6,11 @@ import org.springframework.stereotype.Component;
 import priv.pront.mallchat.common.chat.dao.MessageDao;
 import priv.pront.mallchat.common.chat.domain.dto.ChatMsgRecallDTO;
 import priv.pront.mallchat.common.chat.domain.entity.Message;
-import priv.pront.mallchat.common.chat.domain.entity.msg.FileMsgDTO;
 import priv.pront.mallchat.common.chat.domain.entity.msg.MessageExtra;
 import priv.pront.mallchat.common.chat.domain.entity.msg.MsgRecall;
 import priv.pront.mallchat.common.chat.domain.enums.MessageTypeEnum;
+import priv.pront.mallchat.common.chat.service.cache.MsgCache;
+import priv.pront.mallchat.common.common.event.MessageRecallEvent;
 import priv.pront.mallchat.common.user.domain.entity.User;
 import priv.pront.mallchat.common.user.service.cache.UserCache;
 

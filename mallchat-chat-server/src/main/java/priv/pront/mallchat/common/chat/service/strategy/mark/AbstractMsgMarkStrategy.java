@@ -1,26 +1,22 @@
 package priv.pront.mallchat.common.chat.service.strategy.mark;
 
-import com.abin.mallchat.common.chat.dao.MessageMarkDao;
-import com.abin.mallchat.common.chat.domain.dto.ChatMessageMarkDTO;
-import com.abin.mallchat.common.chat.domain.entity.MessageMark;
-import com.abin.mallchat.common.chat.domain.enums.MessageMarkActTypeEnum;
-import com.abin.mallchat.common.chat.domain.enums.MessageMarkTypeEnum;
-import com.abin.mallchat.common.common.domain.enums.YesOrNoEnum;
-import com.abin.mallchat.common.common.event.MessageMarkEvent;
-import com.abin.mallchat.common.common.exception.BusinessException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.transaction.annotation.Transactional;
+import priv.pront.mallchat.common.chat.dao.MessageMarkDao;
+import priv.pront.mallchat.common.chat.domain.dto.ChatMessageMarkDTO;
+import priv.pront.mallchat.common.chat.domain.entity.MessageMark;
+import priv.pront.mallchat.common.chat.domain.enums.MessageMarkActTypeEnum;
+import priv.pront.mallchat.common.chat.domain.enums.MessageMarkTypeEnum;
+import priv.pront.mallchat.common.common.domain.enums.YesOrNoEnum;
+import priv.pront.mallchat.common.common.event.MessageMarkEvent;
+import priv.pront.mallchat.common.common.exception.BusinessException;
 
 import javax.annotation.PostConstruct;
 import java.util.Objects;
 import java.util.Optional;
 
-/**
- * Description: 消息标记抽象类
- * Author: <a href="https://github.com/zongzibinbin">abin</a>
- * Date: 2023-05-30
- */
 public abstract class AbstractMsgMarkStrategy {
     @Autowired
     private MessageMarkDao messageMarkDao;

@@ -7,6 +7,8 @@ import priv.pront.mallchat.common.user.service.UserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * <p>
  * 用户表 服务实现类
@@ -47,5 +49,13 @@ public class UserDao extends ServiceImpl<UserMapper, User> {
                 .eq(User::getId, id)
                 .set(User::getStatus, YesOrNoEnum.YES.getStatus())
                 .update();
+    }
+
+    public List<User> getFriendList(List<Long> uids) {
+        return lambdaQuery()
+                .in(User::getId, uids)
+                .select(User::getId, User::getActiveStatus, User::getName, User::getAvatar)
+                .list();
+
     }
 }

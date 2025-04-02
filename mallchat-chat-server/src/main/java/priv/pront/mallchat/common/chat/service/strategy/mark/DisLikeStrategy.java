@@ -1,7 +1,7 @@
 package priv.pront.mallchat.common.chat.service.strategy.mark;
 
-import com.abin.mallchat.common.chat.domain.enums.MessageMarkTypeEnum;
 import org.springframework.stereotype.Component;
+import priv.pront.mallchat.common.chat.domain.enums.MessageMarkTypeEnum;
 
 /**
  * Description: 点踩标记策略类

@@ -12,6 +12,7 @@ import priv.pront.mallchat.common.chat.dao.RoomFriendDao;
 import priv.pront.mallchat.common.chat.domain.entity.Room;
 import priv.pront.mallchat.common.chat.domain.enums.HotFlagEnum;
 import priv.pront.mallchat.common.chat.service.ChatService;
+import priv.pront.mallchat.common.chat.service.cache.RoomCache;
 import priv.pront.mallchat.common.common.event.MessageSendEvent;
 import priv.pront.mallchat.common.user.service.cache.UserCache;
 import priv.pront.mallchat.common.websocket.service.WebSocketService;

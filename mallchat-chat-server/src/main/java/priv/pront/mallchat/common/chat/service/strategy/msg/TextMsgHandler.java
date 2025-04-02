@@ -1,27 +1,21 @@
 package priv.pront.mallchat.common.chat.service.strategy.msg;
 
 import cn.hutool.core.collection.CollectionUtil;
-import com.abin.mallchat.common.chat.dao.MessageDao;
-import com.abin.mallchat.common.chat.domain.entity.Message;
-import com.abin.mallchat.common.chat.domain.entity.msg.MessageExtra;
-import com.abin.mallchat.common.chat.domain.enums.MessageStatusEnum;
-import com.abin.mallchat.common.chat.domain.enums.MessageTypeEnum;
-import com.abin.mallchat.common.chat.domain.vo.request.msg.TextMsgReq;
-import com.abin.mallchat.common.chat.domain.vo.response.msg.TextMsgResp;
-import com.abin.mallchat.common.chat.service.adapter.MessageAdapter;
-import com.abin.mallchat.common.chat.service.cache.MsgCache;
-import com.abin.mallchat.common.common.algorithm.sensitiveWord.SensitiveWordBs;
-import com.abin.mallchat.common.common.domain.enums.YesOrNoEnum;
-import com.abin.mallchat.common.common.utils.AssertUtil;
-import com.abin.mallchat.common.common.utils.discover.PrioritizedUrlDiscover;
-import com.abin.mallchat.common.common.utils.discover.domain.UrlInfo;
-import com.abin.mallchat.common.user.domain.entity.User;
-import com.abin.mallchat.common.user.domain.enums.RoleEnum;
-import com.abin.mallchat.common.user.service.IRoleService;
-import com.abin.mallchat.common.user.service.cache.UserCache;
-import com.abin.mallchat.common.user.service.cache.UserInfoCache;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import priv.pront.mallchat.common.chat.dao.MessageDao;
+import priv.pront.mallchat.common.chat.domain.entity.Message;
+import priv.pront.mallchat.common.chat.domain.entity.msg.MessageExtra;
+import priv.pront.mallchat.common.chat.domain.enums.MessageStatusEnum;
+import priv.pront.mallchat.common.chat.domain.enums.MessageTypeEnum;
+import priv.pront.mallchat.common.chat.service.cache.MsgCache;
+import priv.pront.mallchat.common.common.util.AssertUtil;
+import priv.pront.mallchat.common.common.util.discover.domain.UrlInfo;
+import priv.pront.mallchat.common.user.domain.entity.User;
+import priv.pront.mallchat.common.user.domain.enums.RoleEnum;
+import priv.pront.mallchat.common.user.service.cache.UserCache;
+import priv.pront.mallchat.common.user.service.cache.UserInfoCache;
 
 import java.util.List;
 import java.util.Map;

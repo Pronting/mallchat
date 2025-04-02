@@ -20,6 +20,7 @@ import priv.pront.mallchat.common.common.domain.vo.req.CursorPageBaseReq;
 import priv.pront.mallchat.common.common.domain.vo.req.PageBaseReq;
 import priv.pront.mallchat.common.common.domain.vo.resp.CursorPageBaseResp;
 import priv.pront.mallchat.common.common.domain.vo.resp.PageBaseResp;
+import priv.pront.mallchat.common.common.event.UserApplyEvent;
 import priv.pront.mallchat.common.common.util.AssertUtil;
 import priv.pront.mallchat.common.user.dao.UserApplyDao;
 import priv.pront.mallchat.common.user.dao.UserDao;
